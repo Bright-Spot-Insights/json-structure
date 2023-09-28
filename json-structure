@@ -1,0 +1,25 @@
+import ijson
+from collections import defaultdict
+import time
+
+def analyze_structure(filename):
+    structure = defaultdict(set)
+    with open(filename, 'r') as f:
+        # Use ijson to iteratively parse the file
+        parser = ijson.parse(f)
+        for prefix, event, value in parser:
+            # Check the type of the current value
+            if event in ('string', 'number', 'boolean', 'null'):
+                structure[prefix].add(type(value).name)
+    return structure
+
+start_time = time.time()  # get the current time before running the function
+
+structure = analyze_structure('A:\HBCBS\Discord\NY_GYHAMEDVRZD_01_12.json')
+
+end_time = time.time()  # get the current time after running the function
+
+print(f'Time taken: {end_time - start_time} seconds')
+
+for key, types in structure.items():
+    print(f'{key}: {", ".join(types)}')
